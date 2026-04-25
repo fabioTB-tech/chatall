@@ -1,0 +1,165 @@
+{% extends 'base/base.html' %} {% load static %}
+{% block head %}
+<style>
+    main {
+        width: 100vw;
+        height: calc(100dvh - 71px);
+    }
+
+    div#send-msg {
+        height: 100px;
+    }
+    
+    div#chat {
+        overflow-y: scroll;
+    }
+
+    form input {
+        width: 100%;
+        background-color: #efefef;
+        border: none;
+        border-radius: 1cm;
+    }
+    
+    button#sent-msg {
+        background-color: #BAFFD4;
+        font-size: 1.3rem;
+        width: 54px;
+    }
+    
+    button[type=button] {
+        background-color: #FFE5BA;
+        font-size: 1.3rem;
+        width: 54px;
+    }
+    
+    .messages img {
+        width: 70px;
+        height: 70px;
+    }
+
+    .messages p {
+        background-color: #efefef;
+    }
+    
+    span {
+        font-size: 0.5rem;
+    }
+    
+    div#emoji-container.active-emoji {
+        display: block;
+    }
+    
+    div#emoji-container {
+        display: none;
+        background-color: #fefefe;
+        position: absolute;
+        right: 0;
+        bottom: 87px;
+    }
+    
+    #emoji-display {
+        display: grid;
+        gap: 8px;
+        grid-template-columns: repeat(6, 1fr);
+        grid-template-rows: auto auto;
+    }
+    
+    .emoji {
+        justify-self: center;
+        cursor: pointer;
+        border-radius: 1cm;
+        transition: .3s;
+        border: 1px solid #fff;
+        padding: 2px 4px;
+    }
+    
+    .emoji:hover {
+        border: 1px solid #cfcfcf;
+    }
+</style>
+{% endblock %} {% block title %}Chat All{% endblock %} {% block body %}
+<main class="d-flex flex-column align-items-center">
+    <section class="my-5 bg-white card w-50  rounded-3 overflow-y-scroll">
+        <div id="title" class="border px-5 z-2">
+            <h2 class="my-2 fw-bold">Chat</h2>
+        </div>
+        <div id="chat" class="h-100 p-3 d-flex flex-column overflow-y-scroll">
+            {% for message in messages %}
+            <div class="messages">
+                {% if request.user == message.user %}
+                <div class="d-flex flex-row-reverse gap-3">
+                {% else %}
+                <div class="d-flex gap-3">
+                {% endif %}
+                    <a href="{% url 'profile' message.user.id %}">
+                        {% if message.user.perfil.avatar %}
+                        <img
+                            class="border"
+                            src="{{ message.user.perfil.avatar.url }}"
+                            alt="{{ message.user.username }}"
+                            style="background-color: transparent;"
+                        />
+                        {% else %}
+                        <img
+                            class="border"
+                            src="{% static 'img/default_pfp.png' %}"
+                            alt="{{ message.user.username }}"
+                            style="background-color: transparent;"
+                        />
+                        {% endif %}
+                    </a>
+                    <div class="d-flex flex-column ">
+                        {% if request.user == message.user %}
+                        <small class="px-3 align-self-end">{{ message.user.username }} <span>{{ message.sent_at }}</span></small>
+                        <p class="d-inline-block align-self-end p-3 w-75 rounded-pill">{{ message.msg }}</p>
+                        {% else %}
+                        <small class="px-3">{{ message.user.username }} <span>{{ message.sent_at }}</span></small>
+                        <p class="d-inline-block p-3 w-75 rounded-pill">{{ message.msg }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            
+        </div>
+        {% if user.is_authenticated %}
+        <div id="send-msg" class="d-flex align-items-center p-3 border-top z-2">
+            <form method="post" class="d-flex w-100">
+                {% csrf_token %}
+                <input type="text" id="msg-input" name="msg" placeholder="sua mensagem" class="p-2 px-4" />
+                <button id="btn-emoji" type="button" class="btn rounded-circle ms-2 p-2"><i class="fa-regular fa-face-smile"></i></button>
+                <button id="sent-msg" type="submit" class="btn rounded-circle ms-2 p-2"><i class="fa-solid fa-paper-plane"></i></button>
+            </form>
+            <div 
+                id="emoji-container"
+                class="container overflow-y-auto rounded-2 shadow"
+                style="width: 400px; height: 400px;"
+            >
+                <!--<ul id="c-list" class="my-1 nav nav-tabs overflow-x-scroll d-flex flex-nowrap">
+                    <li class="nav-item"><button class="categories nav-link active">rostos</button></li>
+                    <li class="nav-item"><button class="categories nav-link">natureza</button></li>
+                    <li class="nav-item"><button class="categories nav-link">comidas</button></li>
+                    <li class="nav-item"><button class="categories nav-link">lugares</button></li>
+                    <li class="nav-item"><button class="categories nav-link">atividades</button></li>
+                    <li class="nav-item"><button class="categories nav-link">objetos</button></li>
+                    <li class="nav-item"><button class="categories nav-link">símbolos</button></li>
+                    <li class="nav-item"><button class="categories nav-link">bandeiras</button></li>
+                </ul>-->
+                <div id="emoji-display" class="p-1 w-100 h-100">
+                    <div class="d-flex justify-content-center align-items-center">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Carregando...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+    </section>
+</main>
+
+<!--<script src="{% static 'js/index.js' %}"></script>-->
+<script src="../static/js/index.js"></script>
+{% endblock %}

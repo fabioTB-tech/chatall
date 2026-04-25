@@ -1,0 +1,41 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block head %}
+<title>Editar perfil</title>
+<style>
+    div#img-conteiner img {
+        width: 250px;
+        height: 250px;
+        margin-bottom: 15px;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<main class="w-100 h-75 d-flex justify-content-center">
+    <div class="d-flex justify-content-around container-fluid w-75 bg-body mt-5 shadow-lg rounded-3">
+        <div id="img-conteiner" class="p-5 d-flex flex-column align-items-center">
+            {% if request.user.perfil.avatar %}
+            <img src="{{ request.user.perfil.avatar.url }}" alt="{{ user.username }}">
+            {% else %}
+            <img src="{% static 'img/default_pfp.png' %}" alt="{{ user.username }}">
+            {% endif %}
+            <p class="fw-bold">{{ user.username }}</p>
+        </div>
+        
+        <div class="">
+            <form method="post" class="d-flex flex-column p-5">
+                {% csrf_token %}
+                {% for field in form %}
+                <div class="d-flex flex-column mb-4">
+                    <label>{{ field.label }}</label>
+                    {{ field }}
+                </div>
+                {% endfor %}
+                <button class="btn btn-outline-primary" type="submit">Salvar</button>
+            </form>
+        </div>
+    </div>
+</main>
+{% endblock %}

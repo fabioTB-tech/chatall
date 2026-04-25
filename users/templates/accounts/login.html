@@ -1,0 +1,11 @@
+{% extends 'base/enter.html' %} {% load static %} {% block head %}
+<title>Login</title>
+{% endblock %} {% block body %}
+
+{% endblock %}
+{% block links %}
+    <div id="links">
+        <a href="#">Esqueci minha senha</a>
+        <a href="{% url 'register' %}">Cadastrar</a>
+    </div>
+{% endblock %}

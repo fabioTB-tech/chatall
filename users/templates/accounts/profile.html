@@ -1,0 +1,87 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block head %}
+<title>Profile</title>
+{% endblock head %} {% block body %}
+{% if perfil %}
+<main class="d-flex justify-content-center h-75">
+    <div id="profile-container" class="container-fluid d-flex flex-column gap-2 w-50 h-100 p-3 px-5 my-5 bg-body rounded-3 shadow-lg">
+        <div id="profile" class="d-flex align-items-center gap-5 pb-3 w-100">
+            {% if perfil.avatar %}
+            <img
+                src="{{ perfil.avatar.url }}"
+                alt="{{ user.username }}"
+                class="rounded-circle border"
+                style="width: 200px; height: 200px; background-color: #cfcfcf;"
+            />
+            {% else %}
+            <img
+                src="{% static 'img/default_pfp.png' %}"
+                alt="{{ user.username }}"
+                class="rounded-circle border"
+                style="width: 200px; height: 200px; background-color: #cfcfcf;"
+            />
+            {% endif %}
+            <div>
+                <h2 class="fw-bold">{{ perfil.user.username }}</h2>
+                <div class="d-flex gap-3">
+                    <p class="text-secondary">Seguindo: {{ perfil.follows.count }}</p>
+                    <p class="text-secondary">Seguidores: {{ perfil.followed_by.count }}</p>
+                    <p class="text-secondary">Mensagens: {{ count }}</p>
+                </div>
+                {% if request.user == perfil.user %}
+                {% else %}
+                <form method="post">
+                    {% csrf_token %}
+                    {% if perfil in user.perfil.follows.all %}
+                    <button 
+                        class="btn btn-outline-danger"
+                        name="follow"
+                        value="unfollow"
+                        type="submit">
+                        Deixar de seguir
+                    </button>
+                    {% else %}
+                    <button 
+                        class="btn btn-outline-success"
+                        name="follow"
+                        value="follow"
+                        type="submit">
+                        Seguir
+                    </button>
+                    {% endif %}
+                </form>
+                {% endif %}
+            </div>
+            {% if request.user == perfil.user %}
+            <div class="align-self-end">
+                <a class="btn btn-outline-primary" href="{% url 'edit' %}">editar perfil</a>
+            </div>
+            {% endif %}
+        </div>
+        <div id="profile-info" class="h-100 bg-tertiary rounded-3">
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">sobre</a>
+                </li>
+                <!--<li class="nav-item">
+                    <a class="nav-link" href="#">redes sociais</a>
+                </li>-->
+                <li class="nav-item">
+                    <a class="nav-link" href="#">galeria</a>
+                </li>
+            </ul>
+            <div id="bio" class="p-3">
+                <h3 class="fw-bold my-3">Sobre</h3>
+                {% if perfil.bio %}
+                <p>{{ perfil.bio }}</p>
+                {% else %}
+                <p class="text-secondary">sem bio...</p>
+                {% endif %}
+            </div>    
+        </div>
+    </div>
+</main>
+{% endif %}
+{% endblock body %}
