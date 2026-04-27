@@ -124,7 +124,7 @@
         <h1>Login</h1>
         <div id="container">
             <div id="form">
-                <h2>Bem-vindo(a) de volta!<br />Faça login para entrar</h2>
+                <h2>{% block greetings %}{% endblock %}</h2>
                 <form method="post">
                     {% csrf_token %}
                     {% for field in form %}

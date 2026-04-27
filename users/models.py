@@ -22,6 +22,20 @@ class Perfil(models.Model):
         return f"Perfil de: {self.user.username}"
 
 
+class Galeria(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='posts', on_delete=models.DO_NOTHING)
+    image = models.ImageField(upload_to=f'{CustomUser.username}/%Y/%m/%d')
+    description = models.CharField(max_length=200)
+    publicado_em = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return (
+            f'{self.user.username} '
+            f'({self.publicado_em:%m-%d-%Y %H:%M}): '
+            f'{self.description}...'
+        )
+
+
 # Cria o perfil automaticamente ao criar um usuário
 def criar_perfil(sender, instance, created, **kwargs):
     if created:

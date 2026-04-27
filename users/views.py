@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 
-from .models import Perfil
+from .models import CustomUser, Perfil, Galeria
 from .forms import RegisterForm, LoginForm, EditProfile
 from chat_app.models import Chat
 from django.contrib.auth.decorators import login_required
@@ -27,7 +27,7 @@ def register(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('profile')
+            return redirect('home')
     else:
         form = RegisterForm()
     
@@ -43,6 +43,7 @@ def profile(request, pk):
     messages_count = Chat.objects.filter(user_id=pk).count()
     if request.user.is_authenticated:
         profile = Perfil.objects.get(user_id=pk)
+        galeria = Galeria.objects.all()
         if request.method == 'POST':
             current_user_profile = request.user.perfil
             action = request.POST['follow']
@@ -53,7 +54,7 @@ def profile(request, pk):
             current_user_profile.save()
                 
         
-        return render(request, 'accounts/profile.html', { 'count': messages_count, 'perfil': profile })
+        return render(request, 'accounts/profile.html', { 'count': messages_count, 'perfil': profile, 'galeria': galeria })
     else:
         messages.success(request, ('Você deve estar logado para entrar no seu perfil...'))
         return redirect('home')
@@ -61,8 +62,8 @@ def profile(request, pk):
 
 def edit_profile(request):
     if request.user.is_authenticated:
-        current_user = Perfil.objects.get(id=request.user.id)
-        form = EditProfile(request.POST or None, instance=current_user)
+        current_user = Perfil.objects.get(user_id=request.user.id)
+        form = EditProfile(request.POST or None, request.FILES or None, instance=current_user)
         if form.is_valid():
             form.save()
             messages.success(request, ('Perfil editado com sucesso!'))
@@ -72,3 +73,7 @@ def edit_profile(request):
     else:
         messages.success(request, ('Você deve estar logado para visualizar esta página...'))
         return redirect('home')
+
+
+def add_post(request):
+    return render(request, 'accounts/add_post.html')
