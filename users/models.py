@@ -26,7 +26,11 @@ class Galeria(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='posts', on_delete=models.DO_NOTHING)
     image = models.ImageField(upload_to=f'{CustomUser.username}/%Y/%m/%d')
     description = models.CharField(max_length=200)
+    likes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='liked', blank=True)
     publicado_em = models.DateTimeField(auto_now_add=True)
+    
+    def number_of_likes(self):
+        return self.likes.count()
     
     def __str__(self):
         return (
@@ -34,6 +38,9 @@ class Galeria(models.Model):
             f'({self.publicado_em:%m-%d-%Y %H:%M}): '
             f'{self.description}...'
         )
+        
+    class Meta:
+        ordering = ['-publicado_em']
 
 
 # Cria o perfil automaticamente ao criar um usuário

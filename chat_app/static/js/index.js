@@ -57,3 +57,16 @@ function adicionarEmoji(emoji) {
 }
 
 emoji_btn.addEventListener('click', getEmoji)
+
+const btn_profile = document.getElementById('profile')
+const outside_area = document.getElementById('nav-tab')
+
+btn_profile.addEventListener('click', () => {
+  outside_area.classList.remove('d-none')
+})
+
+outside_area.addEventListener('click', () => {
+  if (outside_area.classList != 'd-none') {
+    outside_area.classList.add('d-none')
+  }
+})

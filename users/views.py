@@ -1,9 +1,9 @@
 from django.contrib import messages
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 
 from .models import CustomUser, Perfil, Galeria
-from .forms import RegisterForm, LoginForm, EditProfile
+from .forms import GaleriaForm, RegisterForm, LoginForm, EditProfile
 from chat_app.models import Chat
 from django.contrib.auth.decorators import login_required
 
@@ -75,5 +75,15 @@ def edit_profile(request):
         return redirect('home')
 
 
+@login_required
 def add_post(request):
-    return render(request, 'accounts/add_post.html')
+    if request.method == 'POST':
+        img = request.FILES.get('image')
+        desc = request.POST.get('desc')
+        if img:
+            post = Galeria.objects.create(user=request.user, image=img, description=desc)
+            post.save()
+            
+    galeria = Galeria.objects.all()
+    return render(request, 'accounts/add_post.html', {'galeria':galeria})
+

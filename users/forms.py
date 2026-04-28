@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
-from .models import CustomUser, Perfil
+from .models import CustomUser, Perfil, Galeria
 
 class RegisterForm(UserCreationForm):
     class Meta:
@@ -17,3 +17,9 @@ class EditProfile(forms.ModelForm):
     class Meta:
         model = Perfil 
         fields = ['avatar', 'bio']
+
+
+class GaleriaForm(forms.ModelForm):
+    class Meta:
+        model = Galeria
+        fields = ['description', 'image']

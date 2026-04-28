@@ -1,0 +1,53 @@
+{% extends 'base/base.html' %} {% load static %}
+
+{% block head %}
+<title>Galeria</title>
+{% endblock %}
+
+{% block body %}
+<main class="w-100 d-flex justify-content-center">
+    <div class="w-50 my-5 p-3 d-flex flex-column gap-3 rounded bg-body shadow">
+        {% for post in galeria %}
+        <div class="p-3 border-top d-flex flex-column justify-content-between">
+            <div class="d-flex flex-column">
+                <div class="d-flex gap-3">
+                    <a href="{% url 'profile' post.user.id %}">
+                        <img 
+                            src="{{ post.user.perfil.avatar.url }}" 
+                            alt="{{ post.user.username }}"
+                            width="75"
+                            height="75"
+                            class="rounded-circle border"
+                        >
+                    </a>
+                    <p class="fs-5 fw-bold">
+                        {{ post.user.username }}
+                        <br>
+                        <small class="fs-6 fw-light text-secondary">{{ post.publicado_em }}</small>
+                    </p>
+                </div>
+                <div class="p-3 align-self-center w-75">
+                    <p>{{ post.description }}</p>
+                </div>
+            </div>
+            <div class="align-self-center text-center w-100">
+                <img 
+                    src="{{ post.image.url }}" 
+                    alt="{{ post.description }}"
+                    class="w-50 h-100 border rounded"
+                >
+            </div>
+            {% if user in post.likes.all %}
+            <div class="d-flex w-50 fs-4">
+                <a href="{% url 'post_like' post.id %}"><i class="fa-solid fa-heart"></i> {{ post.number_of_likes }}</a>
+            </div>
+            {% else %}
+            <div class="d-flex w-50 fs-4">
+                <a href="{% url 'post_like' post.id %}"><i class="fa-regular fa-heart"></i> {{ post.number_of_likes }}</a>
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+</main>
+{% endblock%}

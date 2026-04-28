@@ -47,7 +47,7 @@
                     </button>
                     {% else %}
                     <button 
-                        class="btn btn-success"
+                        class="btn btn-primary"
                         name="follow"
                         value="follow"
                         type="submit">
@@ -78,13 +78,27 @@
                     </div>
                     {% for post in galeria %}
                     {% if perfil.user_id == post.user_id %}
-                    <div class="d-flex flex-column align-items-center gap-3 p-3">
+                    <div class="d-flex flex-column align-items-center gap-1 p-3 border-top">
+                        <p class="w-75 fs-5">
+                            <small class="align-self-start fw-light fs-6 text-secondary small">{{ post.publicado_em }}</small>
+                            <br>
+                            {{ post.description }}
+                        </p>
                         <img 
                             src="{{ post.image.url }}" 
                             alt="{{ post.user.username }}"
-                            class="w-75 h-75 rounded-1"
+                            class="w-75 h-75 rounded-1 border"
                         >
-                        <p class="w-75 text-secondary">{{ post.description }}</p>
+                        
+                        {% if user in post.likes.all %}
+                        <div class="d-flex w-75 fs-4">
+                            <a href="{% url 'post_like' post.id %}"><i class="fa-solid fa-heart"></i> {{ post.number_of_likes }}</a>
+                        </div>
+                        {% else %}
+                        <div class="d-flex w-75 fs-4">
+                            <a href="{% url 'post_like' post.id %}"><i class="fa-regular fa-heart"></i> {{ post.number_of_likes }}</a>
+                        </div>
+                        {% endif %}
                     </div>
                     {% endif %}
                     {% empty %}
