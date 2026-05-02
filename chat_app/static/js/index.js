@@ -5,9 +5,6 @@ const emoji_container = document.getElementById('emoji-container')
 const msg_input = document.getElementById('msg-input')
 const categories = document.querySelectorAll('categories')
 
-const chat = document.getElementById('chat')
-chat.scrollTop = chat.scrollHeight
-
 document.addEventListener('DOMContentLoaded', () => {
   msg_input.focus()
 })
@@ -58,15 +55,7 @@ function adicionarEmoji(emoji) {
 
 emoji_btn.addEventListener('click', getEmoji)
 
-const btn_profile = document.getElementById('profile')
-const outside_area = document.getElementById('nav-tab')
-
-btn_profile.addEventListener('click', () => {
-  outside_area.classList.remove('d-none')
-})
-
-outside_area.addEventListener('click', () => {
-  if (outside_area.classList != 'd-none') {
-    outside_area.classList.add('d-none')
-  }
+const chat = document.getElementById('chat')
+document.addEventListener('DOMContentLoaded', () => {
+    chat.scrollTop = chat.scrollHeight
 })

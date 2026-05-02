@@ -86,7 +86,7 @@
 </style>
 {% endblock %} {% block title %}Chat All{% endblock %} {% block body %}
 <main class="d-flex flex-column align-items-center">
-    <section class="my-5 bg-white card w-50  rounded-3 overflow-y-scroll">
+    <section class="my-lg-5 h-100 bg-white card w-sm-100 w-lg-25 rounded-3 overflow-y-scroll">
         <div id="title" class="border px-5 z-2">
             <h2 class="my-2 fw-bold">Chat</h2>
         </div>
@@ -118,10 +118,10 @@
                     <div class="d-flex flex-column w-75">
                         {% if request.user == message.user %}
                         <small class="px-3 align-self-end">{{ message.user.username }} <span>{{ message.sent_at }}</span></small>
-                        <p class="align-self-end p-3 rounded-pill">{{ message.msg }}</p>
+                        <p class="align-self-end p-3 rounded-5">{{ message.msg }}</p>
                         {% else %}
                         <small class="px-3">{{ message.user.username }} <span>{{ message.sent_at }}</span></small>
-                        <p class="align-self-start p-3 rounded-pill">{{ message.msg }}</p>
+                        <p class="align-self-start p-3 rounded-5">{{ message.msg }}</p>
                         {% endif %}
                     </div>
                 </div>
@@ -164,8 +164,10 @@
         {% endif %}
 
     </section>
+    {% if request.user.is_authenticated %}
+    {% include 'base/includes/profiles.html' %}
+    {% endif %}
 </main>
 
-<!--<script src="{% static 'js/index.js' %}"></script>-->
-<script src="../static/js/index.js"></script>
+<script src="{% static 'js/index.js' %}"></script>
 {% endblock %}

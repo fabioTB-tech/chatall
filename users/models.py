@@ -17,19 +17,25 @@ class Perfil(models.Model):
         blank=True)
     avatar = models.ImageField(upload_to='avatars/%Y/%M/', default='/default_pfp.png', null=True, blank=True)
     bio = models.TextField(blank=True)
+
+    def number_of_follows(self):
+        return self.follows.count() - 1
+
+    def number_of_followers(self):
+        return self.followed_by.count() - 1
     
     def __str__(self):
         return f"Perfil de: {self.user.username}"
-
+        
 
 class Galeria(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='posts', on_delete=models.DO_NOTHING)
     image = models.ImageField(upload_to=f'{CustomUser.username}/%Y/%m/%d')
     description = models.CharField(max_length=200)
-    likes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='liked', blank=True)
+    likes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='liked_posts', blank=True)
     publicado_em = models.DateTimeField(auto_now_add=True)
-    
-    def number_of_likes(self):
+
+    def likes_count(self):
         return self.likes.count()
     
     def __str__(self):

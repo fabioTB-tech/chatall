@@ -12,6 +12,7 @@
 
     header {
         background-color: #e0b9ff;
+        z-index: 1;
 
         p {
             margin: 0;
@@ -45,9 +46,19 @@
         background-color: transparent;
         border: none;
     }
+
+    @media screen and (min-width: 768px) {
+        nav#sidenav-tab {
+            max-width: 25%;
+        }
+    }
+    
+    i.fa-heart {
+        color: #e0b9ff;
+    }
 </style>
 
-<header class="row row-cols-3 text-center align-items-center p-2 border-bottom shadow-sm">
+<header class="position-sticky top-0 row row-cols-3 text-center align-items-center p-2 border-bottom shadow-sm">
     <div class="col">
         {% if user.is_authenticated %}
         <button
@@ -68,7 +79,7 @@
                     style="background-color: transparent"
                 />
                 {% endif %}
-            <p>{{ user.username }}</p>
+            <p class="d-none d-lg-inline">{{ user.username }}</p>
             {% else %}
             <img src="{% static 'img/default_pfp.png' %}" alt="user pfp" />
             <p>Profile</p>
@@ -93,20 +104,24 @@
 <!-- Nav tab -->
 {% if user.is_authenticated %}
 <div id="nav-tab" class="d-none h-100 w-100 fixed-top" style="background-color: #00000050;">
-    <nav class="w-25 h-100 p-3 bg-body border d-flex flex-column align-items-center">
+    <nav id="sidenav-tab" class="w-75 h-100 p-3 bg-body border d-flex flex-column align-items-center">
         <div class="text-center">
             <img 
                 src="{{ user.perfil.avatar.url }}" 
                 alt="{{ user.username }}"
                 width="250"
+                height="250"
                 class="rounded-circle"
             >
-            <p class="my-3 fw-bold fs-4">{{ user.username }}</p>
+            <p class="my-3 fw-bold fs-lg-4">{{ user.username }}</p>
         </div>
         <div class="w-75">
             <ul class="nav flex-column gap-3 border-top fs-5 fw-bold">
                 <li class="nav-item">
-                    <a class="nav-link link-dark mt-5" href="{% url 'profile' request.user.id %}">Meu perfil</a>
+                    <a class="nav-link link-dark mt-lg-5" href="{% url 'home' %}">Início</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link link-dark" href="{% url 'profile' request.user.id %}">Meu perfil</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link link-dark" href="{% url 'galery' %}">Galeria</a>

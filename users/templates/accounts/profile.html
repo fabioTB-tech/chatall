@@ -5,9 +5,9 @@
 <title>Profile</title>
 {% endblock head %} {% block body %}
 {% if perfil %}
-<main class="d-flex justify-content-center">
-    <div id="profile-container" class="container-fluid d-flex flex-column gap-2 w-50 h-100 p-3 px-5 my-5 bg-body rounded-3 shadow-lg">
-        <div id="profile" class="d-flex align-items-center gap-5 pb-3 w-100">
+<main class="d-flex justify-content-center w-100">
+    <div id="profile-container" class="container-sm d-flex flex-column gap-2 h-100 py-3 px-lg-5 my-lg-5 bg-body rounded-3 shadow-lg">
+        <div id="profile" class="d-flex flex-column flex-lg-row align-items-center gap-5 pb-3 w-100">
             {% if perfil.avatar %}
             <img
                 src="{{ perfil.avatar.url }}"
@@ -25,9 +25,9 @@
             {% endif %}
             <div>
                 <h2 class="fw-bold">{{ perfil.user.username }}</h2>
-                <div class="d-flex gap-3">
-                    <p class="text-secondary">Seguindo: {{ perfil.follows.count }}</p>
-                    <p class="text-secondary">Seguidores: {{ perfil.followed_by.count }}</p>
+                <div class="d-flex gap-3 flex-sm-column flex-lg-row">
+                    <p class="text-secondary">Seguindo: {{ perfil.number_of_follows }}</p>
+                    <p class="text-secondary">Seguidores: {{ perfil.number_of_followers }}</p>
                     <p class="text-secondary">Mensagens: {{ count }}</p>
                 </div>
                 {% if request.user == perfil.user %}
@@ -68,7 +68,7 @@
                 <p class="text-secondary">sem bio...</p>
                 {% endif %}
             </div>
-            <div id="galeria" class="m-2 p-3">
+            <div id="galeria" class="m-lg-2 my-sm-2 p-lg-3">
                 <div>
                     <div class="d-flex justify-content-between align-items-center">
                         <h3 class="fw-bold my-3">Galeria</h3>
@@ -78,7 +78,7 @@
                     </div>
                     {% for post in galeria %}
                     {% if perfil.user_id == post.user_id %}
-                    <div class="d-flex flex-column align-items-center gap-1 p-3 border-top">
+                    <div class="d-flex flex-column align-items-center gap-1 p-lg-3 py-3 border-top">
                         <p class="w-75 fs-5">
                             <small class="align-self-start fw-light fs-6 text-secondary small">{{ post.publicado_em }}</small>
                             <br>
@@ -87,18 +87,15 @@
                         <img 
                             src="{{ post.image.url }}" 
                             alt="{{ post.user.username }}"
-                            class="w-75 h-75 rounded-1 border"
+                            class="w-50 h-50 rounded-1 border"
                         >
                         
-                        {% if user in post.likes.all %}
-                        <div class="d-flex w-75 fs-4">
-                            <a href="{% url 'post_like' post.id %}"><i class="fa-solid fa-heart"></i> {{ post.number_of_likes }}</a>
+                        <div class="d-flex w-50 fs-4">
+                            <button style="background-color: transparent; border: none;" class="like-button" data-url="{% url 'post_like' post.id %}">
+                                <i class="{% if request.user in post.likes.all %}fa-solid{% else %}fa-regular{% endif %} fa-heart"></i> 
+                                <span>{{ post.likes_count }}</span>
+                            </button>
                         </div>
-                        {% else %}
-                        <div class="d-flex w-75 fs-4">
-                            <a href="{% url 'post_like' post.id %}"><i class="fa-regular fa-heart"></i> {{ post.number_of_likes }}</a>
-                        </div>
-                        {% endif %}
                     </div>
                     {% endif %}
                     {% empty %}
@@ -110,39 +107,5 @@
     </div>
 </main>
 {% endif %}
-<!--<script src="{% static 'js/profile.js' %}"></script>-->
-<script>
-const bio = document.querySelector('div#bio')
-const galeria = document.querySelector('div#galeria')
-const link_bio = document.querySelector('button#nav-bio')
-const link_galeria = document.querySelector('button#nav-galeria')
-const links = document.getElementsByClassName('nav-link')
-
-link_bio.addEventListener('click', event => {
-  bio.classList.remove('d-none')
-  if (galeria.classList != 'd-none') {
-    galeria.classList.add('d-none')
-  }
-  if (link_bio.classList == 'active') {
-    return
-  } else {
-    link_bio.classList.add('active')
-    link_galeria.classList.remove('active')
-  }
-})
-
-link_galeria.addEventListener('click', event => {
-  galeria.classList.remove('d-none')
-  if (bio.classList != 'd-none') {
-    bio.classList.add('d-none')
-  }
-  if (link_galeria.classList == 'active') {
-    return
-  } else {
-    link_galeria.classList.add('active')
-    link_bio.classList.remove('active')
-  }
-})
-
-</script>
+<script src="{% static 'js/post.js' %}"></script>
 {% endblock body %}

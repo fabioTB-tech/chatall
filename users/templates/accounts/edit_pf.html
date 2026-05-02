@@ -13,8 +13,8 @@
 {% endblock %}
 
 {% block body %}
-<main class="w-100 h-75 d-flex justify-content-center">
-    <div class="d-flex justify-content-around container-fluid w-75 bg-body mt-5 shadow-lg rounded-3">
+<main class="w-100 h-lg-75 d-flex justify-content-center">
+    <div class="d-flex flex-column flex-lg-row justify-content-around container-fluid w-lg-75 w-sm-100 bg-body mt-lg-5 shadow-lg rounded-3">
         <div id="img-conteiner" class="p-5 d-flex flex-column align-items-center">
             {% if request.user.perfil.avatar %}
             <img src="{{ request.user.perfil.avatar.url }}" alt="{{ user.username }}" class="rounded-circle">
