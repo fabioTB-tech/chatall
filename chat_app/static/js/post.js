@@ -19,7 +19,7 @@ document.addEventListener('click', async (event) => {
       button.querySelector('i').classList.toggle('fa-regular', !data.liked);
       button.querySelector('i').classList.toggle('fa-solid', data.liked);
       button.querySelector('span').textContent = data.likes_count;
-      
+
     } catch (error) {
       console.error('Error liking post:', error);
   }

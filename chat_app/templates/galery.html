@@ -18,7 +18,7 @@
         <div class="p-3 border-top d-flex flex-column justify-content-between">
             <div class="d-flex flex-column">
                 <div class="d-flex gap-3">
-                    <a href="{% url 'profile' post.user.id %}">
+                    <a href="{% url 'profile' post.user.username %}">
                         <img 
                             src="{{ post.user.perfil.avatar.url }}" 
                             alt="{{ post.user.username }}"
@@ -33,19 +33,21 @@
                         <small class="fs-6 fw-light text-secondary">{{ post.publicado_em }}</small>
                     </p>
                 </div>
-                <div class="p-3 align-self-center w-75">
+                <div class="p-3 align-self-start w-100">
                     <p>{{ post.description }}</p>
                 </div>
             </div>
             <div id="container-img-post" class="container-md align-self-center text-center">
-                <img 
-                    src="{{ post.image.url }}" 
-                    alt="{{ post.description }}"
-                    class="img-fluid border rounded"
-                >
+                <a href="{% url 'post_detail' post.id %}">
+                    <img 
+                        src="{{ post.image.url }}" 
+                        alt="{{ post.description }}"
+                        class="img-fluid border rounded"
+                    >
+                </a>
             </div>
 
-            <div class="d-flex w-50 fs-4">
+            <div class="d-flex w-50 fs-3 mx-3 mt-2">
                 <button style="background-color: transparent; border: none;" class="like-button" data-url="{% url 'post_like' post.id %}">
                     <i class="{% if request.user in post.likes.all %}fa-solid{% else %}fa-regular{% endif %} fa-heart"></i> 
                     <span>{{ post.likes_count }}</span>

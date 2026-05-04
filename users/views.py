@@ -1,3 +1,5 @@
+from math import log
+from threading import local
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
@@ -39,10 +41,10 @@ def logout_view(request):
     return redirect('home')
 
 
-def profile(request, pk):
-    messages_count = Chat.objects.filter(user_id=pk).count()
+def profile(request, username):
+    messages_count = Chat.objects.filter(user__username=username).count()
     if request.user.is_authenticated:
-        profile = Perfil.objects.get(user_id=pk)
+        profile = Perfil.objects.get(user__username=username)
         galeria = Galeria.objects.all()
         if request.method == 'POST':
             current_user_profile = request.user.perfil
@@ -87,3 +89,15 @@ def add_post(request):
     galeria = Galeria.objects.all()
     return render(request, 'accounts/add_post.html', {'galeria':galeria})
 
+
+@login_required
+def delete_post(request, post_id):
+    post = Galeria.objects.get(pk=post_id)
+    post.delete()
+    return redirect(request.META.get('HTTP_REFERER'))
+
+
+@login_required
+def people(request):
+    users = Perfil.objects.all()
+    return render(request, 'accounts/people.html', {'users': users})

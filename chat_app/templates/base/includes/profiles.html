@@ -12,7 +12,7 @@
         {% for perfil in profiles %}
         {% if perfil.user != request.user %}
         <li class="list-group-item">
-            <a href="{% url 'profile' perfil.user.id %}" class="d-flex align-items-center">
+            <a href="{% url 'profile' perfil.user.username %}" class="d-flex align-items-center">
                 <img 
                     src="{{ perfil.avatar.url }}" 
                     alt="{{ perfil.user.username }}'s Profile Image" 

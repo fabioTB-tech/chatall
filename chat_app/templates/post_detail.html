@@ -1,0 +1,43 @@
+{% extends 'base/base.html' %}
+
+{% block body %}
+<main class="w-100">
+    <div class="container-lg p-3 my-lg-5 shadow bg-body rounded">
+        <a href="{% url 'profile' post.user.id %}" class="d-flex align-items-end">
+            <img 
+                src="{{ post.user.perfil.avatar.url }}" 
+                alt="{{ post.user.username }}"
+                width="100"
+                height="100"
+                class="border rounded-circle"
+            >
+            <div class="ms-2 text-secondary">
+                <p class="fw-bold">{{ post.user.username }}</p>
+                <p>{{ post.publicado_em }}</p>
+            </div>
+        </a>
+        <div class="my-3">
+            <p>{{ post.description }}</p>
+            <img 
+                src="{{ post.image.url }}" 
+                alt="{{ post.description }}" 
+                class="w-100 rounded border">
+        </div>
+        <span>Likes: {{ post.likes_count }}</span>
+        <div class="d-flex mt-3 gap-3">
+            {% for like in post.likes.all %}
+            <a href="{% url 'profile' like.id %}" class="d-flex gap-3 align-items-end">
+                <img 
+                    src="{{ like.perfil.avatar.url }}" 
+                    alt="{{ like.username }}"
+                    width="50"
+                    height="50"
+                    class="border rounded-circle"
+                >
+                <p class="text-secondary">{{ like.username }}</p>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</main>
+{% endblock %}

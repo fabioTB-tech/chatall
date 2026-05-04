@@ -111,7 +111,7 @@
                 alt="{{ user.username }}"
                 width="250"
                 height="250"
-                class="rounded-circle"
+                class="rounded-circle border shadow"
             >
             <p class="my-3 fw-bold fs-lg-4">{{ user.username }}</p>
         </div>
@@ -124,10 +124,13 @@
                     <a class="nav-link link-dark" href="{% url 'profile' request.user.id %}">Meu perfil</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link link-dark" href="{% url 'people' %}">Pessoas</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link link-dark" href="{% url 'galery' %}">Galeria</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link disabled" href="#">Feedback</a>
+                    <a class="nav-link link-dark" href="{% url 'feedback' %}">Feedback</a>
                 </li>
                 <li class="nav-item">
                     <form action="{% url 'logout' %}" method="post">

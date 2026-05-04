@@ -98,7 +98,7 @@
                 {% else %}
                 <div class="d-flex gap-3">
                 {% endif %}
-                    <a id="img-container" href="{% url 'profile' message.user.id %}">
+                    <a id="img-container" href="{% url 'profile' message.user.username %}">
                         {% if message.user.perfil.avatar %}
                         <img
                             class="img-fluid border rounded-circle"

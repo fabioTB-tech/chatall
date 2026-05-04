@@ -3,6 +3,40 @@
 
 {% block head %}
 <title>Profile</title>
+<style>
+    .opt-button {
+        position: relative;
+        background-color: transparent;
+        border: 1px solid transparent;
+        border-radius: 50%;
+        padding: 0 3px;
+        transition: 0.5s;
+    }
+
+    .opt-button:hover {
+        border: 1px solid #00000050;
+    }
+
+    .opt-menu {
+        display: none;
+        position: absolute;
+        top: 0;
+        left: -255px;
+        width: 250px;
+    }
+
+    li.list-group-item:hover {
+        transition: .3s;
+        color: #00000050;
+    }
+
+    @media (max-width: 768px) {
+        .opt-menu {
+            left: -205px;
+            width: 200px;
+        }
+    }
+</style>
 {% endblock head %} {% block body %}
 {% if perfil %}
 <main class="d-flex justify-content-center w-100">
@@ -78,7 +112,7 @@
                     </div>
                     {% for post in galeria %}
                     {% if perfil.user_id == post.user_id %}
-                    <div class="d-flex flex-column align-items-center gap-1 p-lg-3 py-3 border-top">
+                    <a class="d-flex flex-column align-items-center gap-1 p-lg-3 py-3 border-top" href="{% url 'post_detail' post.id %}">
                         <p class="w-75 fs-5">
                             <small class="align-self-start fw-light fs-6 text-secondary small">{{ post.publicado_em }}</small>
                             <br>
@@ -89,13 +123,27 @@
                             alt="{{ post.user.username }}"
                             class="w-50 h-50 rounded-1 border"
                         >
-                        
-                        <div class="d-flex w-50 fs-4">
-                            <button style="background-color: transparent; border: none;" class="like-button" data-url="{% url 'post_like' post.id %}">
-                                <i class="{% if request.user in post.likes.all %}fa-solid{% else %}fa-regular{% endif %} fa-heart"></i> 
-                                <span>{{ post.likes_count }}</span>
-                            </button>
-                        </div>
+                    </a>
+                    <div class="d-flex justify-content-between w-50 fs-4 mx-auto mb-3">
+                        <button style="background-color: transparent; border: none;" class="like-button" data-url="{% url 'post_like' post.id %}">
+                            <i class="{% if request.user in post.likes.all %}fa-solid{% else %}fa-regular{% endif %} fa-heart"></i> 
+                            <span>{{ post.likes_count }}</span>
+                        </button>
+                        {% if request.user == post.user %}
+                        <button class="opt-button">
+                            <i class="fa-solid fa-ellipsis-vertical"></i>
+                            <div class="opt-menu rounded p-3 flex-column card">
+                                <ul class="list-group list-group-flush">
+                                    <li class="opt-delete list-group-item">
+                                        <a href="{% url 'delete_post' post.pk %}" class="opt-item">
+                                            <i class="fa-solid fa-trash"></i>
+                                            <span>Excluir</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </button>
+                        {% endif %}
                     </div>
                     {% endif %}
                     {% empty %}
@@ -108,4 +156,21 @@
 </main>
 {% endif %}
 <script src="{% static 'js/post.js' %}"></script>
+<script>
+document.querySelectorAll('.opt-button').forEach(button => {
+    button.addEventListener('click', () => {
+        const menu = document.querySelector('.opt-menu');
+        menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
+    });
+});
+
+document.querySelectorAll('.opt-delete').forEach(item => {
+    item.addEventListener('click', () => {
+        if (!confirm('Tem certeza que deseja excluir este post?')) {
+            event.preventDefault();
+        }
+    });
+});
+
+</script>
 {% endblock body %}
