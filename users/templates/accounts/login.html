@@ -1,14 +1,41 @@
-{% extends 'base/enter.html' %} {% load static %} {% block head %}
-<title>Login</title>
-{% endblock %} {% block body %}
+{% extends 'base/base.html' %} 
+{% load static %}
 
-{% endblock %}
-{% block greetings %}
-Bem vindo(a) de volta! <br> Faça login para entrar
-{% endblock %}
-{% block links %}
-    <div id="links">
-        <a href="#">Esqueci minha senha</a>
-        <a href="{% url 'register' %}">Cadastrar</a>
+{% block head %}
+<title>Login</title>
+{% endblock %} 
+
+{% block body %}
+<main class="w-100">
+    <div class="container-lg my-5 p-3 bg-body rounded shadow">
+        <h1 class="fw-bold mb-3">Login</h1>
+        <form method="post">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="mb-4">
+                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                {{ field }}
+            </div>
+            {% if field.errors %}
+            <div>
+                <span class="text-danger">{{ field.errors }}</span>
+            </div>
+            {% endif %}
+            {% endfor %}
+            <button type="submit" class="btn btn-primary w-100">Login</button>
+            <a href="{% url 'register' %}" class="d-inline-block w-100 mt-3 ms-2 link-primary">Cadastrar</a>
+        </form>
     </div>
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('input').forEach((input) => {
+        input.classList.add('form-control');
+    });
+    document.querySelectorAll('label').forEach((label) => {
+        label.classList.add('form-label');
+    });
+});
+</script>
 {% endblock %}

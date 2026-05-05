@@ -60,7 +60,6 @@
 
 <header class="position-sticky top-0 row row-cols-3 text-center align-items-center p-2 border-bottom shadow-sm">
     <div class="col">
-        {% if user.is_authenticated %}
         <button
             id="profile"
             class="d-flex gap-3 mx-3 align-items-center justify-content-center"
@@ -82,27 +81,14 @@
             <p class="d-none d-lg-inline">{{ user.username }}</p>
             {% else %}
             <img src="{% static 'img/default_pfp.png' %}" alt="user pfp" />
-            <p>Profile</p>
+            <p class="d-none d-lg-inline">Profile</p>
             {% endif %}
         </button>
-        {% endif %}
     </div>
     <h1 class="col"><a href="{% url 'home' %}">Chat.All</a></h1>
-    {% if user.is_authenticated %}
-    {% else %}
-    <div id="nav" class="col">
-        <a href="{% url 'login' %}" class="btn rounded-pill p-2 px-4 fw-bold"
-            >entrar</a
-        >
-        <a href="{% url 'register' %}" class="btn rounded-pill p-2 px-4 fw-bold"
-            >cadastrar</a
-        >
-    </div>
-    {% endif %}
 </header>
 
-<!-- Nav tab -->
-{% if user.is_authenticated %}
+{% comment %} nav tab {% endcomment %}
 <div id="nav-tab" class="d-none h-100 w-100 fixed-top" style="background-color: #00000050;">
     <nav id="sidenav-tab" class="w-75 h-100 p-3 bg-body border d-flex flex-column align-items-center">
         <div class="text-center">
@@ -116,6 +102,7 @@
             <p class="my-3 fw-bold fs-lg-4">{{ user.username }}</p>
         </div>
         <div class="w-75">
+            {% if user.is_authenticated %}
             <ul class="nav flex-column gap-3 border-top fs-5 fw-bold">
                 <li class="nav-item">
                     <a class="nav-link link-dark mt-lg-5" href="{% url 'home' %}">Início</a>
@@ -141,10 +128,19 @@
                     </form>
                 </li>
             </ul>
+            {% else %}
+            <ul class="nav flex-column gap-3 border-top fs-5 fw-bold">
+                <li class="nav-item mt-lg-3">
+                    <a class="nav-link link-dark" href="{% url 'login' %}">Entrar</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link link-dark" href="{% url 'register' %}">Cadastrar</a>
+                </li>
+            </ul>
+            {% endif %}
         </div>
     </nav>
 </div>
-{% endif %}
 
 <script>
 const btn_profile = document.getElementById('profile')
