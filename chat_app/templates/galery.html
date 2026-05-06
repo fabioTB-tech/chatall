@@ -1,0 +1,63 @@
+{% extends 'base/base.html' %} {% load static %}
+
+{% block head %}
+<title>Galeria</title>
+<style>
+@media (min-width: 768px) {
+    div#container-img-post {
+        width: 50%;
+    }
+}
+</style>
+{% endblock %}
+
+{% block body %}
+<main class="w-100 d-flex justify-content-center">
+    <div class="container-md my-lg-5 p-3 d-flex flex-column gap-3 rounded bg-body shadow">
+        {% for post in galeria %}
+        <div class="p-3 border-top d-flex flex-column justify-content-between">
+            <div class="d-flex flex-column">
+                <div class="d-flex gap-3">
+                    <a href="{% url 'profile' post.user.username %}">
+                        <img 
+                            src="{{ post.user.perfil.avatar.url }}" 
+                            alt="{{ post.user.username }}"
+                            width="75"
+                            height="75"
+                            class="rounded-circle border"
+                        >
+                    </a>
+                    <p class="fs-5 fw-bold">
+                        {{ post.user.username }}
+                        <br>
+                        <small class="fs-6 fw-light text-secondary">{{ post.publicado_em }}</small>
+                    </p>
+                </div>
+                <div class="p-3 align-self-start w-100">
+                    <p>{{ post.description }}</p>
+                </div>
+            </div>
+            <div id="container-img-post" class="container-md align-self-center text-center">
+                <a href="{% url 'post_detail' post.id %}">
+                    <img 
+                        src="{{ post.image.url }}" 
+                        alt="{{ post.description }}"
+                        class="img-fluid border rounded"
+                    >
+                </a>
+            </div>
+
+            <div class="d-flex w-50 fs-3 mx-3 mt-2">
+                <button style="background-color: transparent; border: none;" class="like-button" data-url="{% url 'post_like' post.id %}">
+                    <i class="{% if request.user in post.likes.all %}fa-solid{% else %}fa-regular{% endif %} fa-heart"></i> 
+                    <span>{{ post.likes_count }}</span>
+                </button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% include 'base/includes/profiles.html' %}
+</main>
+
+<script src="{% static 'js/post.js' %}"></script>
+{% endblock%}

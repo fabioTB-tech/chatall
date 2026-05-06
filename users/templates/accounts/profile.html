@@ -1,0 +1,176 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block head %}
+<title>Profile</title>
+<style>
+    .opt-button {
+        position: relative;
+        background-color: transparent;
+        border: 1px solid transparent;
+        border-radius: 50%;
+        padding: 0 3px;
+        transition: 0.5s;
+    }
+
+    .opt-button:hover {
+        border: 1px solid #00000050;
+    }
+
+    .opt-menu {
+        display: none;
+        position: absolute;
+        top: 0;
+        left: -255px;
+        width: 250px;
+    }
+
+    li.list-group-item:hover {
+        transition: .3s;
+        color: #00000050;
+    }
+
+    @media (max-width: 768px) {
+        .opt-menu {
+            left: -205px;
+            width: 200px;
+        }
+    }
+</style>
+{% endblock head %} {% block body %}
+{% if perfil %}
+<main class="d-flex justify-content-center w-100">
+    <div id="profile-container" class="container-sm d-flex flex-column gap-2 h-100 py-3 px-lg-5 my-lg-5 bg-body rounded-3 shadow-lg">
+        <div id="profile" class="d-flex flex-column flex-lg-row align-items-center gap-5 pb-3 w-100">
+            {% if perfil.avatar %}
+            <img
+                src="{{ perfil.avatar.url }}"
+                alt="{{ user.username }}"
+                class="rounded-circle border"
+                style="width: 200px; height: 200px; background-color: #cfcfcf;"
+            />
+            {% else %}
+            <img
+                src="{% static 'img/default_pfp.png' %}"
+                alt="{{ user.username }}"
+                class="rounded-circle border"
+                style="width: 200px; height: 200px; background-color: #cfcfcf;"
+            />
+            {% endif %}
+            <div>
+                <h2 class="fw-bold">{{ perfil.user.username }}</h2>
+                <div class="d-flex gap-3 flex-sm-column flex-lg-row">
+                    <p class="text-secondary">Seguindo: {{ perfil.number_of_follows }}</p>
+                    <p class="text-secondary">Seguidores: {{ perfil.number_of_followers }}</p>
+                    <p class="text-secondary">Mensagens: {{ count }}</p>
+                </div>
+                {% if request.user == perfil.user %}
+                <div class="align-self-end">
+                    <a class="btn btn-outline-primary" href="{% url 'edit' %}">editar perfil</a>
+                </div>
+                {% else %}
+                <form method="post">
+                    {% csrf_token %}
+                    {% if perfil in user.perfil.follows.all %}
+                    <button 
+                        class="btn btn-danger"
+                        name="follow"
+                        value="unfollow"
+                        type="submit">
+                        Deixar de seguir
+                    </button>
+                    {% else %}
+                    <button 
+                        class="btn btn-primary"
+                        name="follow"
+                        value="follow"
+                        type="submit">
+                        Seguir
+                    </button>
+                    {% endif %}
+                </form>
+                {% endif %}
+            </div>
+        </div>
+        <div id="profile-info" class="h-100 bg-tertiary rounded-3">
+            
+            <div id="bio" class="rounded-2 shadow m-2 p-3">
+                <h3 class="fw-bold my-3">Sobre</h3>
+                {% if perfil.bio %}
+                <p>{{ perfil.bio }}</p>
+                {% else %}
+                <p class="text-secondary">sem bio...</p>
+                {% endif %}
+            </div>
+            <div id="galeria" class="m-lg-2 my-sm-2 p-lg-3">
+                <div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h3 class="fw-bold my-3">Galeria</h3>
+                        {% if request.user.id == perfil.user_id %}
+                        <a class="btn btn-outline-primary" href="{% url 'add_post' %}"><i class="fa-solid fa-plus"></i></a>
+                        {% endif %}
+                    </div>
+                    {% for post in galeria %}
+                    {% if perfil.user_id == post.user_id %}
+                    <a class="d-flex flex-column align-items-center gap-1 p-lg-3 py-3 border-top" href="{% url 'post_detail' post.id %}">
+                        <p class="w-75 fs-5">
+                            <small class="align-self-start fw-light fs-6 text-secondary small">{{ post.publicado_em }}</small>
+                            <br>
+                            {{ post.description }}
+                        </p>
+                        <img 
+                            src="{{ post.image.url }}" 
+                            alt="{{ post.user.username }}"
+                            class="w-50 h-50 rounded-1 border"
+                        >
+                    </a>
+                    <div class="d-flex justify-content-between w-50 fs-4 mx-auto mb-3">
+                        <button style="background-color: transparent; border: none;" class="like-button" data-url="{% url 'post_like' post.id %}">
+                            <i class="{% if request.user in post.likes.all %}fa-solid{% else %}fa-regular{% endif %} fa-heart"></i> 
+                            <span>{{ post.likes_count }}</span>
+                        </button>
+                        {% if request.user == post.user %}
+                        <button class="opt-button">
+                            <i class="fa-solid fa-ellipsis-vertical"></i>
+                            <div class="opt-menu rounded p-3 flex-column card">
+                                <ul class="list-group list-group-flush">
+                                    <li class="opt-delete list-group-item">
+                                        <a href="{% url 'delete_post' post.pk %}" class="opt-item">
+                                            <i class="fa-solid fa-trash"></i>
+                                            <span>Excluir</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </button>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                    {% empty %}
+                    <h4 class="text-secondary">Galeria vazia...</h4>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endif %}
+<script src="{% static 'js/post.js' %}"></script>
+<script>
+document.querySelectorAll('.opt-button').forEach(button => {
+    button.addEventListener('click', () => {
+        const menu = document.querySelector('.opt-menu');
+        menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
+    });
+});
+
+document.querySelectorAll('.opt-delete').forEach(item => {
+    item.addEventListener('click', () => {
+        if (!confirm('Tem certeza que deseja excluir este post?')) {
+            event.preventDefault();
+        }
+    });
+});
+
+</script>
+{% endblock body %}

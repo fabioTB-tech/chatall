@@ -1,0 +1,7 @@
+.chatall_env/
+media/
+chat_app/static/
+__pycache__/
+.env
+.DS_Store
+db.sqlite3
