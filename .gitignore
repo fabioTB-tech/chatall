@@ -1,6 +1,6 @@
 .chatall_env/
 media/
-staticfiles/
+chat_app/static/
 __pycache__/
 .env
 .DS_Store
