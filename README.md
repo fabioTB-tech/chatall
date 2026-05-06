@@ -1,2 +1,0 @@
-# chatall
-Um site para conversar com várias pessoas ao mesmo tempo, tendo cada pessoa um perfil individual e personalizável, além de uma galeria para cada perfil a qual você poderá postar seus projetos, suas artes ou apenas suas opiniões pessoais
