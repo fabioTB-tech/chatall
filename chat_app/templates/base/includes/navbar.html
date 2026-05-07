@@ -92,6 +92,7 @@
 <div id="nav-tab" class="d-none h-100 w-100 fixed-top" style="background-color: #00000050;">
     <nav id="sidenav-tab" class="w-75 h-100 p-3 bg-body border d-flex flex-column align-items-center">
         <div class="text-center">
+            {% if request.user.perfil.avatar %}
             <img 
                 src="{{ user.perfil.avatar.url }}" 
                 alt="{{ user.username }}"
@@ -99,6 +100,15 @@
                 height="250"
                 class="rounded-circle border shadow"
             >
+            {% else %}
+            <img 
+                src="{% static 'img/default_pfp.png' %}" 
+                alt="{{ user.username }}"
+                width="250"
+                height="250"
+                class="rounded-circle border shadow"
+            >
+            {% endif %}
             <p class="my-3 fw-bold fs-lg-4">{{ user.username }}</p>
         </div>
         <div class="w-75">

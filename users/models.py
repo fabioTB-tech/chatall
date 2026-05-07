@@ -15,7 +15,7 @@ class Perfil(models.Model):
         related_name='followed_by',
         symmetrical=False,
         blank=True)
-    avatar = models.ImageField(upload_to='avatars/%Y/%M/', default='/default_pfp.png', null=True, blank=True)
+    avatar = models.ImageField(upload_to='avatars/%Y/%M/', null=True, blank=True)
     bio = models.TextField(blank=True)
 
     def number_of_follows(self):

@@ -1,4 +1,5 @@
 {% extends 'base/base.html' %}
+{% load static %}
 
 {% block title %}Usuários{% endblock %}
 
@@ -22,6 +23,7 @@
                 <li class="list-group-item">
                     <a href="{% url 'profile' user.user.username %}" class="d-flex">
                         <div class="d-flex">
+                            {% if user.avatar %}
                             <img 
                                 src="{{ user.avatar.url }}" 
                                 alt="Logo"
@@ -29,6 +31,15 @@
                                 height="40"
                                 class="rounded-circle me-2"
                             >
+                            {% else %}
+                            <img 
+                                src="{% static 'img/default_pfp.png' %}" 
+                                alt="Logo"
+                                width="40"
+                                height="40"
+                                class="rounded-circle me-2"
+                            >
+                            {% endif %}
                             <span>{{ user.user.username }}</span>
                         </div>
                     </a>

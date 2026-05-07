@@ -3,7 +3,8 @@
 {% block body %}
 <main class="w-100">
     <div class="container-lg p-3 my-lg-5 shadow bg-body rounded">
-        <a href="{% url 'profile' post.user.id %}" class="d-flex align-items-end">
+        <a href="{% url 'profile' post.user.username %}" class="d-flex align-items-end">
+            {% if post.user.perfil.avatar %}
             <img 
                 src="{{ post.user.perfil.avatar.url }}" 
                 alt="{{ post.user.username }}"
@@ -11,6 +12,15 @@
                 height="100"
                 class="border rounded-circle"
             >
+            {% else %}
+            <img 
+                src="{% static 'img/default_pfp.png' %}" 
+                alt="{{ post.user.username }}"
+                width="100"
+                height="100"
+                class="border rounded-circle"
+            >
+            {% endif %}
             <div class="ms-2 text-secondary">
                 <p class="fw-bold">{{ post.user.username }}</p>
                 <p>{{ post.publicado_em }}</p>

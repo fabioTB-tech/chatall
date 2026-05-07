@@ -1,3 +1,4 @@
+{% load static %}
 <section class="d-none d-xxl-block card shadow" 
     style="
     position: absolute; 
@@ -13,11 +14,21 @@
         {% if perfil.user != request.user %}
         <li class="list-group-item">
             <a href="{% url 'profile' perfil.user.username %}" class="d-flex align-items-center">
+                {% if perfil.avatar %}
                 <img 
                     src="{{ perfil.avatar.url }}" 
                     alt="{{ perfil.user.username }}'s Profile Image" 
                     class="mx-3 border"
-                    style="width: 40px; height: 40px; border-radius: 50%;">
+                    style="width: 40px; height: 40px; border-radius: 50%;"
+                >
+                {% else %}
+                <img 
+                    src="{% static 'img/default_pfp.png' %}" 
+                    alt="{{ perfil.user.username }}'s Profile Image" 
+                    class="mx-3 border"
+                    style="width: 40px; height: 40px; border-radius: 50%;"
+                >
+                {% endif %}
                 {{ perfil.user.username }}
             </a>
         </li>

@@ -33,7 +33,7 @@
         width: 54px;
     }
     
-    #img-container {
+    a#img-container {
         width: 70px;
         height: 70px;
         overflow: hidden;
@@ -101,14 +101,14 @@
                     <a id="img-container" href="{% url 'profile' message.user.username %}">
                         {% if message.user.perfil.avatar %}
                         <img
-                            class="img-fluid border rounded-circle"
+                            class="img-fluid border rounded-circle w-100 h-100"
                             src="{{ message.user.perfil.avatar.url }}"
                             alt="{{ message.user.username }}"
                             style="background-color: transparent;"
                         />
                         {% else %}
                         <img
-                            class="border rounded-circle"
+                            class="border rounded-circle w-100 h-100"
                             src="{% static 'img/default_pfp.png' %}"
                             alt="{{ message.user.username }}"
                             style="background-color: transparent;"
@@ -162,7 +162,6 @@
             </div>
         </div>
         {% endif %}
-
     </section>
     {% if request.user.is_authenticated %}
     {% include 'base/includes/profiles.html' %}
